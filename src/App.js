@@ -23,7 +23,7 @@ import axios from 'axios';
           ))
 
 return(<div>
-  [list]
+  {list}
   </div>
   );
 }
