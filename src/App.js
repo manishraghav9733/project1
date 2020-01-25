@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import { Table } from "antd"
 import axios from 'axios';
 
 
@@ -7,24 +8,42 @@ import axios from 'axios';
    const fetchData = async () => {
     const response= await axios.get(
       "http://dummy.restapiexample.com/api/v1/employees");
-      setData(response);
-      console.log(response.data); 
+        setData(JSON.parse(response.data['id', 'employee_name', 'employee_salary','Title']));
+      console.log(JSON.parse(response.data));
     };
   useEffect(() => {
-     fetchData(resource);
+     fetchData();
   },[]);
 
-  const list = ()=>resource.map((item,i) => (
-              <div key={i}>
-              <span>name - {item.name}</span>
-              <span> address - {item.address}</span>
-              <span>contact - {item.contact}</span>
-              </div>
-          ))
+const columns = [
+  {
+    title: 'id',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
+    title: 'employee_name',
+    dataIndex: 'employee_name',
+    key: 'employee_name',
+  },
+  {
+    title: 'employee_salary',
+    dataIndex: 'employee_salary',
+    key: 'employee_salary',
+  },
+  {
+    title: 'Title',
+    dataIndex: 'Title',
+    key: 'Title',
+  },
+];
 
-return(<div>
-  {list}
-  </div>
-  );
+  return(
+    <Table 
+    dataSource={resource} 
+    columns={columns} 
+    />
+    );    
 }
+
 export default App;
