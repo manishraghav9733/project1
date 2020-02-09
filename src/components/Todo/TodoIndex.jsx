@@ -20,6 +20,8 @@ const TodoIndex = () => {
   const [value, setValue] = useState("");
   const [updateValue, setUpdateValue] = useState("");
 
+  const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
 
   const onTodoInputChange = e => {
@@ -50,6 +52,7 @@ const TodoIndex = () => {
       message.warning("please upload Avatar");
       return;
     }
+    setLoading(true);
 
     let tempList = [];
     tempList = [
@@ -63,6 +66,8 @@ const TodoIndex = () => {
     // console.log(tempList);
     setTodo(tempList);
     setValue("");
+    setLoading(false);
+    setImageLoading(false);
   };
 
   function getBase64(img, callback) {
@@ -72,13 +77,16 @@ const TodoIndex = () => {
   }
 
   const handleChange = info => {
+    setImageLoading(true);
     getBase64(info.file.originFileObj, imageUrl => setImageUrl(imageUrl));
   };
 
   const onDeleteTodo = (data, index) => {
+    setLoading(true);
     let tempList = [...todo];
     tempList.splice(index, 1);
     setTodo(tempList);
+    setLoading(false);
   };
 
   const onUpdate = (data, index) => {
@@ -98,6 +106,7 @@ const TodoIndex = () => {
   };
 
   const onSave = (data, index) => {
+    setLoading(true);
     let tempList = [...todo];
     //setUpdate(!update);
 
@@ -112,12 +121,13 @@ const TodoIndex = () => {
     });
     message.success("updated successfully");
     setTodo(tempList);
+    setLoading(false);
   };
 
   const uploadProps = {
     action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     onChange: handleChange,
-    showUploadList: true
+    showUploadList: imageLoading
   };
 
   return (
@@ -174,24 +184,24 @@ const TodoIndex = () => {
                 )
               ]}
             >
-              {/* <Skeleton avatar title={false} active>*/}
-              <List.Item.Meta
-                avatar={<Avatar src={item.img} />}
-                title={
-                  <span>
-                    {item.update === false ? (
-                      item.title
-                    ) : (
-                      <Input
-                        value={updateValue}
-                        style={{ width: "40%" }}
-                        onChange={onTodoUpdateChange}
-                      />
-                    )}
-                  </span>
-                }
-              />
-              {/*</List.Item> </Skeleton>*/}
+              <Skeleton avatar title={false} loading={loading} active>
+                <List.Item.Meta
+                  avatar={<Avatar src={item.img} />}
+                  title={
+                    <span>
+                      {item.update === false ? (
+                        item.title
+                      ) : (
+                        <Input
+                          value={updateValue}
+                          style={{ width: "40%" }}
+                          onChange={onTodoUpdateChange}
+                        />
+                      )}
+                    </span>
+                  }
+                />
+              </Skeleton>
             </List.Item>
           )}
         />
