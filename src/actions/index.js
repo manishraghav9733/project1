@@ -5,3 +5,9 @@ export const employeeList = async () => {
 
   return response;
 };
+
+export const employeeDelete = async id => {
+  const response = await employeeApi().delete(`/api/v1/delete/${id}`);
+
+  return response;
+};

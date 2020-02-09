@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Divider, Popconfirm } from "antd";
-import { employeeList } from "../actions";
+import { employeeList, employeeDelete } from "../actions";
 import "antd/dist/antd.css";
 
 const EmployeeIndex = () => {
   //
   const [resource, setResource] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [search, setsearch] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +57,7 @@ const EmployeeIndex = () => {
             title="Are you sure you want to delete ?"
             okText="Yes"
             cancelText="No"
-            //  onConfirm={() => onDelete(record)}
+            onConfirm={() => onDelete(record)}
           >
             <Button
               type="link"
@@ -69,6 +70,11 @@ const EmployeeIndex = () => {
       )
     }
   ];
+
+  const onDelete = async record => {
+    //console.log(record.id);
+    await employeeDelete(record.id);
+  };
 
   return (
     <div>
